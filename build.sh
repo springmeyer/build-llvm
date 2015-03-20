@@ -66,8 +66,8 @@ function update() {
         OPTS="--enable-libcpp --enable-cxx11"
     fi
     ./configure --prefix=${PREFIX} --enable-optimized --enable-clang-static-analyzer --disable-assertions $OPTS
-    time make ENABLE_OPTIMIZED=1 DISABLE_ASSERTIONS=1 -j2
-    make install ENABLE_OPTIMIZED=1 DISABLE_ASSERTIONS=1 -j2
+    time make ENABLE_OPTIMIZED=1 DISABLE_ASSERTIONS=1 -j${JOBS}
+    make install ENABLE_OPTIMIZED=1 DISABLE_ASSERTIONS=1 -j${JOBS}
     cp Release/bin/clang "${PREFIX}/bin/clang"
     strip -x ${PREFIX}/bin/clang
 }

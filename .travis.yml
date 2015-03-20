@@ -6,6 +6,7 @@ compiler:
 env:
   global:
     - PREFIX=$(pwd)/install
+    - JOBS="8"
 
 before_install:
  - sudo apt-get -y install swig
