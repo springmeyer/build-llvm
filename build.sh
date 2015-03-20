@@ -49,7 +49,11 @@ function update() {
     #CLIB=/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/6.0/include:/usr/include
     #CPPLIB=/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1/
     #  --with-c-include-dirs=${CLIB}:${CPPLIB}
-    ./configure --prefix=${PREFIX} --enable-optimized --enable-clang-static-analyzer --enable-libcpp --enable-cxx11 --disable-assertions
+    OPTS=""
+    if [[ $(uname -s) == 'Darwin' ]]; then
+        OPTS="--enable-libcpp --enable-cxx11"
+    fi
+    ./configure --prefix=${PREFIX} --enable-optimized --enable-clang-static-analyzer --disable-assertions $OPTS
     time make ENABLE_OPTIMIZED=1 DISABLE_ASSERTIONS=1 -j2
     make install ENABLE_OPTIMIZED=1 DISABLE_ASSERTIONS=1 -j2
     cp Release/bin/clang "${PREFIX}/bin/clang"
