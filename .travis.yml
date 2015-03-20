@@ -1,0 +1,21 @@
+language: cpp
+
+compiler:
+ - clang
+
+env:
+  global:
+    - PREFIX=$(pwd)/install
+
+before_install:
+ - sudo apt-get -y install swig
+
+install:
+ - ./build.sh # setup
+
+before_script:
+ - ./build.sh # update
+
+script:
+ - file $PREFIX/bin/clang
+ - file $PREFIX/bin/lldb
