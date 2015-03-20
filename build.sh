@@ -7,6 +7,18 @@ PREFIX=${PREFIX:-"/opt/llvm/"}
 
 function abort { >&2 echo -e "\033[1m\033[31m$1\033[0m"; exit 1; }
 
+function setup_cpp11() {
+    if [[ ! -d ./.mason ]]; then
+        git clone --depth 1 https://github.com/mapbox/mason.git ./.mason
+    else
+        echo "Updating to latest mason"
+        (cd ./.mason && git pull)
+    fi
+    export MASON_DIR=$(pwd)/.mason
+    if [[ $(uname -s) == 'Linux' ]]; then source ./.mason/scripts/setup_cpp11_toolchain.sh; fi
+    export PATH=$(pwd)/.mason:$PATH
+}
+
 function setup() {
     git clone --depth 1 http://llvm.org/git/llvm.git
     cd llvm/tools
@@ -62,6 +74,7 @@ function update() {
 
 function main() {
     which swig || abort 'please install swig'
+    setup_cpp11
     if [[ ! -d llvm ]]; then
         setup
     else
