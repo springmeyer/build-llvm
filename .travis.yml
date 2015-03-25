@@ -6,7 +6,7 @@ compiler:
 env:
   global:
     - PREFIX=$(pwd)/install
-    - JOBS="8"
+    - JOBS="12"
 
 before_install:
  - sudo apt-get -y install swig
@@ -15,7 +15,8 @@ install:
  - ./build.sh # setup
 
 before_script:
- - ./build.sh # update
+ - true
+ # ./build.sh # update
 
 script:
  - file $PREFIX/bin/clang
