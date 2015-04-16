@@ -10,7 +10,7 @@ env:
 
 before_install:
  - sudo apt-get -y update
- - sudo apt-get -y install swig libedit-dev
+ - sudo apt-get -y install swig libedit-dev subversion make
 
 install:
  - ./build.sh # setup

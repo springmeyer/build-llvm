@@ -58,23 +58,19 @@ function setup() {
 
 function update() {
     CLEAN=""
+    echo "**** updating llvm"
     cd llvm
     ${CLEAN} && git pull
-    cd tools/lldb
-    ${CLEAN} && git pull
-    cd ../../
-    cd tools/clang
-    ${CLEAN} && git pull
-    cd tools/clang-tools-extra
-    ${CLEAN} && git pull
-    cd ../include-what-you-use
-    ${CLEAN} && svn up
-    cd ../../../../projects/compiler-rt/
-    ${CLEAN} && git pull
-    cd ../../
+    (echo "**** updating lldb" && cd tools/lldb && ${CLEAN} && git pull)
+    (echo "**** updating clang" && cd tools/clang && ${CLEAN} && git pull)
+    (echo "**** updating clang-tools-extra" && cd tools/clang/tools/clang-tools-extra && ${CLEAN} && git pull)
+    (echo "**** updating include-what-you-use" && cd tools/clang/tools/include-what-you-use && ${CLEAN} && svn up)
+    (echo "**** updating compiler-rt" && cd projects/compiler-rt && ${CLEAN} && git pull)
 }
 
 function main() {
+    which git || abort 'please install git'
+    which svn || abort 'please install svn'
     which swig || abort 'please install swig'
     setup_cpp11
     if [[ ! -d llvm ]]; then
