@@ -9,7 +9,8 @@ env:
     - JOBS="12"
 
 before_install:
- - sudo apt-get -y install swig
+ - sudo apt-get -y update
+ - sudo apt-get -y install swig libedit-dev
 
 install:
  - ./build.sh # setup
