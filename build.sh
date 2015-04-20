@@ -71,7 +71,7 @@ function update() {
 function main() {
     which git || abort 'please install git'
     which svn || abort 'please install svn'
-    which swig || abort 'please install swig'
+    export CXXFLAGS="-DLLDB_DISABLE_PYTHON -DLLDB_DISABLE_CURSES -DLLDB_DISABLE_LIBEDIT -DLLVM_ENABLE_TERMINFO=0"
     setup_cpp11
     if [[ ! -d llvm ]]; then
         setup
