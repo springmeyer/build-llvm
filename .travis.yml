@@ -1,5 +1,7 @@
 language: cpp
 
+sudo: false
+
 compiler:
  - clang
 
@@ -9,6 +11,7 @@ env:
     - JOBS="12"
 
 before_install:
+ # https://github.com/travis-ci/apt-package-whitelist/blob/master/ubuntu-precise
  - sudo apt-get -y update
  - sudo apt-get -y install subversion make
  #- sudo apt-get -y install swig libedit-dev subversion make python-dev
