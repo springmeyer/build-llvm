@@ -8,13 +8,19 @@ compiler:
 env:
   global:
     - PREFIX=$(pwd)/install
+    - CXX=clang++-3.5
+    - CC=clang-3.5
     - JOBS="12"
 
-before_install:
- # https://github.com/travis-ci/apt-package-whitelist/blob/master/ubuntu-precise
- - sudo apt-get -y update
- - sudo apt-get -y install subversion make
- #- sudo apt-get -y install swig libedit-dev subversion make python-dev
+# http://docs.travis-ci.com/user/apt/
+addons:
+  apt:
+    sources:
+     - llvm-toolchain-precise-3.5
+    packages:
+     - subversion
+     - time
+     - clang-3.5
 
 install:
  - ./build.sh # setup
