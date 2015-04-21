@@ -7,23 +7,28 @@ compiler:
 
 env:
   global:
-    - PREFIX=$(pwd)/install
-    #- CXX=clang++-3.5
-    #- CC=clang-3.5
-    - JOBS="12"
+    - PREFIX: $(pwd)/install
+    - CXX: "clang++-3.5"
+    - CC: "clang-3.5"
+    - JOBS: "12"
 
 # http://docs.travis-ci.com/user/apt/
 addons:
   apt:
-    #sources:
-    # - llvm-toolchain-precise-3.5
+    sources:
+     - ubuntu-toolchain-r-test
+     - llvm-toolchain-precise-3.5
     packages:
      - subversion
      - time
-     #- clang-3.5
+     - clang-3.5
      - libedit-dev
 
 install:
+ - which $CXX
+ - which $CC
+ - $CXX --version
+ - $CC --version
  - ./build.sh # setup
 
 before_script:
