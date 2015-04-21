@@ -21,6 +21,7 @@ addons:
      - subversion
      - time
      - clang-3.5
+     - libedit-dev
 
 install:
  - ./build.sh # setup
