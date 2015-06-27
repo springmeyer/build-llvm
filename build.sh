@@ -4,20 +4,10 @@ set -e -u
 set -o pipefail
 
 PREFIX=${PREFIX:-"/opt/llvm/"}
+CWD=$(pwd)
 
 function abort { >&2 echo -e "\033[1m\033[31m$1\033[0m"; exit 0; }
 
-function setup_cpp11() {
-    if [[ ! -d ./.mason ]]; then
-        git clone --depth 1 https://github.com/mapbox/mason.git ./.mason
-    else
-        echo "Updating to latest mason"
-        (cd ./.mason && git pull)
-    fi
-    export MASON_DIR=$(pwd)/.mason
-    if [[ $(uname -s) == 'Linux' ]]; then source ./.mason/scripts/setup_cpp11_toolchain.sh; fi
-    export PATH=$(pwd)/.mason:$PATH
-}
 
 function build() {
     # TODO - get this working or embed custom libc++
@@ -28,7 +18,11 @@ function build() {
     if [[ $(uname -s) == 'Darwin' ]]; then
         OPTS="--enable-libcpp --enable-cxx11"
     fi
-    ./configure --prefix=${PREFIX} --enable-optimized --enable-clang-static-analyzer --disable-assertions $OPTS
+    cd $CWD
+    rm -rf ./build
+    mkdir ./build
+    cd ./build
+    ../llvm/configure --prefix=${PREFIX} --enable-optimized --enable-clang-static-analyzer --disable-assertions $OPTS
     time make ENABLE_OPTIMIZED=1 DISABLE_ASSERTIONS=1 -j${JOBS}
     make install ENABLE_OPTIMIZED=1 DISABLE_ASSERTIONS=1 -j${JOBS}
     cp Release/bin/clang "${PREFIX}/bin/clang"
@@ -63,7 +57,7 @@ function update() {
     ${CLEAN} && git pull
     (echo "**** updating lldb" && cd tools/lldb && ${CLEAN} && git pull)
     (echo "**** updating clang" && cd tools/clang && ${CLEAN} && git pull)
-    (echo "**** updating clang-tools-extra" && cd tools/clang/tools/clang-tools-extra && ${CLEAN} && git pull)
+    (echo "**** updating clang-tools-extra" && cd tools/clang/tools/extra && ${CLEAN} && git pull)
     (echo "**** updating include-what-you-use" && cd tools/clang/tools/include-what-you-use && ${CLEAN} && svn up)
     (echo "**** updating compiler-rt" && cd projects/compiler-rt && ${CLEAN} && git pull)
 }
@@ -72,7 +66,6 @@ function main() {
     which git || abort 'please install git'
     which svn || abort 'please install svn'
     export CXXFLAGS="-DLLDB_DISABLE_PYTHON -DLLDB_DISABLE_CURSES -DLLDB_DISABLE_LIBEDIT -DLLVM_ENABLE_TERMINFO=0"
-    setup_cpp11
     if [[ ! -d llvm ]]; then
         setup
     else
