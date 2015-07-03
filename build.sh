@@ -4,6 +4,7 @@ set -e -u
 set -o pipefail
 
 PREFIX=${PREFIX:-"/opt/llvm/"}
+JOBS=${JOBS:-4}
 CWD=$(pwd)
 
 function abort { >&2 echo -e "\033[1m\033[31m$1\033[0m"; exit 0; }
@@ -37,7 +38,7 @@ function setup() {
         git clone --depth 1 http://llvm.org/git/clang.git
         # c-index-test build is broken against libxml2
         perl -p -i -e 's/c-index-test//g' clang/tools/Makefile
-        git clone --depth 1 http://llvm.org/git/lldb.git
+        #git clone --depth 1 http://llvm.org/git/lldb.git
         cd clang/tools
         git clone --depth 1 http://llvm.org/git/clang-tools-extra.git extra
         svn co http://include-what-you-use.googlecode.com/svn/trunk/ include-what-you-use
@@ -55,7 +56,7 @@ function update() {
     echo "**** updating llvm"
     cd llvm
     ${CLEAN} && git pull
-    (echo "**** updating lldb" && cd tools/lldb && ${CLEAN} && git pull)
+    #(echo "**** updating lldb" && cd tools/lldb && ${CLEAN} && git pull)
     (echo "**** updating clang" && cd tools/clang && ${CLEAN} && git pull)
     (echo "**** updating clang-tools-extra" && cd tools/clang/tools/extra && ${CLEAN} && git pull)
     (echo "**** updating include-what-you-use" && cd tools/clang/tools/include-what-you-use && ${CLEAN} && svn up)
