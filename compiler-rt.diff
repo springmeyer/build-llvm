@@ -1,0 +1,17 @@
+--- Makefile	2015-10-31 13:34:23.000000000 -0700
++++ Makefile	2015-10-31 13:34:01.000000000 -0700
+@@ -83,10 +83,10 @@
+ 
+ IOS_SDK := $(shell xcrun --show-sdk-path -sdk iphoneos 2> /dev/null)
+ IOSSIM_SDK := $(shell xcrun --show-sdk-path -sdk iphonesimulator 2> /dev/null)
+-TVOS_SDK := $(shell xcrun --show-sdk-path -sdk appletvos 2> /dev/null)
+-TVOSSIM_SDK := $(shell xcrun --show-sdk-path -sdk appletvsimulator 2> /dev/null)
+-WATCHOS_SDK := $(shell xcrun --show-sdk-path -sdk watchos 2> /dev/null)
+-WATCHOSSIM_SDK := $(shell xcrun --show-sdk-path -sdk watchsimulator 2> /dev/null)
++#TVOS_SDK := $(shell xcrun --show-sdk-path -sdk appletvos 2> /dev/null)
++#TVOSSIM_SDK := $(shell xcrun --show-sdk-path -sdk appletvsimulator 2> /dev/null)
++#WATCHOS_SDK := $(shell xcrun --show-sdk-path -sdk watchos 2> /dev/null)
++#WATCHOSSIM_SDK := $(shell xcrun --show-sdk-path -sdk watchsimulator 2> /dev/null)
+ 
+ LinkerSupportedArches = \
+   $(shell \
