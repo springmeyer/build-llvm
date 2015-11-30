@@ -51,7 +51,7 @@ function setup() {
         cd ../../../
         cd ./projects
         git clone --depth 1 http://llvm.org/git/compiler-rt.git
-        (cd compiler-rt && patch < ../../../../../compiler-rt.diff -N)
+        (cd compiler-rt && patch -N < ${CWD}/compiler-rt.diff)
         cd ../
         git config branch.master.rebase true
     fi
