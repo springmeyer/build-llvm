@@ -7,6 +7,9 @@ PREFIX=${PREFIX:-"/opt/llvm/"}
 JOBS=${JOBS:-4}
 CWD=$(pwd)
 
+# lldb has been frequently not compiling, so I've given up enabling it by default
+ENABLE_LLDB=false
+
 function abort { >&2 echo -e "\033[1m\033[31m$1\033[0m"; exit 0; }
 
 
@@ -38,7 +41,9 @@ function setup() {
         git clone --depth 1 http://llvm.org/git/clang.git
         # c-index-test build is broken against libxml2
         perl -p -i -e 's/c-index-test//g' clang/tools/Makefile
-        #git clone --depth 1 http://llvm.org/git/lldb.git
+        if [[ ${ENABLE_LLDB} == true ]]; then
+            git clone --depth 1 http://llvm.org/git/lldb.git
+        fi
         cd clang/tools
         git clone --depth 1 http://llvm.org/git/clang-tools-extra.git extra
         svn co http://include-what-you-use.googlecode.com/svn/trunk/ include-what-you-use
@@ -53,21 +58,25 @@ function setup() {
 }
 
 function update() {
-    CLEAN=""
     echo "**** updating llvm"
     cd llvm
-    ${CLEAN} && git pull
-    #(echo "**** updating lldb" && cd tools/lldb && ${CLEAN} && git pull)
-    (echo "**** updating clang" && cd tools/clang && ${CLEAN} && git pull)
-    (echo "**** updating clang-tools-extra" && cd tools/clang/tools/extra && ${CLEAN} && git pull)
-    (echo "**** updating include-what-you-use" && cd tools/clang/tools/include-what-you-use && ${CLEAN} && svn up)
-    (echo "**** updating compiler-rt" && cd projects/compiler-rt && ${CLEAN} && git pull)
+    git pull
+    if [[ ${ENABLE_LLDB} == true ]]; then
+        (echo "**** updating lldb" && cd tools/lldb && git pull)
+    fi
+    (echo "**** updating clang" && cd tools/clang && git pull)
+    (echo "**** updating clang-tools-extra" && cd tools/clang/tools/extra && git pull)
+    (echo "**** updating include-what-you-use" && cd tools/clang/tools/include-what-you-use && svn up)
+    (echo "**** updating compiler-rt" && cd projects/compiler-rt && git pull)
 }
 
 function main() {
     which git || abort 'please install git'
     which svn || abort 'please install svn'
-    export CXXFLAGS="-DLLDB_DISABLE_PYTHON -DLLDB_DISABLE_CURSES -DLLDB_DISABLE_LIBEDIT -DLLVM_ENABLE_TERMINFO=0"
+    # designed to limit the need for extra deps to build lldb
+    if [[ ${ENABLE_LLDB} == true ]]; then
+        export CXXFLAGS="-DLLDB_DISABLE_PYTHON -DLLDB_DISABLE_CURSES -DLLDB_DISABLE_LIBEDIT -DLLVM_ENABLE_TERMINFO=0"
+    fi
     if [[ ! -d llvm ]]; then
         setup
     else
