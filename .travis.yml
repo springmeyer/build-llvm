@@ -37,10 +37,6 @@ install:
      export CXX="ccache clang++-3.5 -Qunused-arguments";
      export CC="ccache clang-3.5 -Qunused-arguments";
    fi
- - which $CXX
- - which $CC
- - $CXX --version
- - $CC --version
  - ./build.sh # setup
 
 before_script:
