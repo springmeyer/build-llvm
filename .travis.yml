@@ -37,8 +37,13 @@ install:
  - ~/.mason/mason link cmake 3.2.2
  - export PATH=$(pwd)/mason_packages/.link/bin:${PATH}
  - if [[ $(uname -s) == 'Linux' ]]; then
-     export CXX="ccache clang++-3.6 -Qunused-arguments";
-     export CC="ccache clang-3.6 -Qunused-arguments";
+     echo '#!/bin/bash' > ./cxx_compiler;
+     echo 'ccache clang++-3.6 -Qunused-arguments "$@"' >> ./cxx_compiler;
+     chmod +x ./cxx_compiler;
+     export CXX="$(pwd)/cxx_compiler";
+     echo 'ccache clang-3.6 -Qunused-arguments "$@"' >> ./c_compiler;
+     chmod +x ./c_compiler;
+     export CC="$(pwd)/c_compiler";
      git clone --depth=1 git://github.com/martine/ninja.git;
      cd ninja;
      export PATH=$(pwd):${PATH};
