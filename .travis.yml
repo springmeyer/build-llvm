@@ -38,7 +38,7 @@ install:
      export CC="ccache clang-3.5 -Qunused-arguments";
      git clone --depth=1 git://github.com/martine/ninja.git;
      cd ninja;
-     export PATH=$(pwd):${PATH}
+     export PATH=$(pwd):${PATH};
      ./configure.py --bootstrap;
      cd ../;
    else
