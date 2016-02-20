@@ -18,7 +18,7 @@ function build() {
     #CPPLIB=/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1/
     cd $CWD
     #rm -rf ./build
-    #mkdir ./build
+    mkdir -p ./build
     cd ./build
     # does not have cstdint
     #-DC_INCLUDE_DIRS=:/usr/include/c++/4.2.1/ \
