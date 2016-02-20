@@ -10,7 +10,7 @@ CWD=$(pwd)
 # lldb has been frequently not compiling, so I've given up enabling it by default
 ENABLE_LLDB=false
 
-function abort { >&2 echo -e "\033[1m\033[31m$1\033[0m"; exit 0; }
+function abort { >&2 echo -e "\033[1m\033[31m$1\033[0m"; exit 1; }
 
 function build() {
     # TODO - get this working or embed custom libc++
@@ -53,7 +53,7 @@ function setup() {
         fi
         cd clang/tools
         git clone --depth 1 http://llvm.org/git/clang-tools-extra.git extra
-        git clone --depth 1 git@github.com:include-what-you-use/include-what-you-use.git
+        git clone --depth 1 https://github.com/include-what-you-use/include-what-you-use.git
         cd ../../../
         cd ./projects
         git clone --depth 1 http://llvm.org/git/compiler-rt.git
