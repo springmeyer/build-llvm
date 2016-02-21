@@ -39,7 +39,7 @@ function build() {
      -DCLANG_REPOSITORY_STRING=https://github.com/springmeyer/build-llvm \
      -DCLANG_APPEND_VC_REV=$(git -C ../llvm/tools/clang/ rev-list --max-count=1 HEAD) \
      -DCLANG_VENDOR_UTI=org.mapbox.clang
-    ninja -j${JOBS}
+    ninja -j${JOBS} -l 2
     ninja install
 }
 
