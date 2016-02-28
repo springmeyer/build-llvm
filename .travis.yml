@@ -5,7 +5,7 @@ sudo: false
 env:
   global:
     - PREFIX: $(pwd)/install
-    - JOBS: "12"
+    - JOBS: "4"
 
 matrix:
   include:

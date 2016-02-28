@@ -42,8 +42,9 @@ function build() {
      -DCLANG_APPEND_VC_REV=$(git -C ../llvm/tools/clang/ rev-list --max-count=1 HEAD) \
      -DCLANG_VENDOR_UTI=org.mapbox.clang \
      -DCMAKE_EXE_LINKER_FLAGS="${LDFLAGS}" \
-     -DCMAKE_CXX_FLAGS_RELEASE="${CXXFLAGS}"
-    ninja -j${JOBS} -l 2
+     -DCMAKE_CXX_FLAGS_RELEASE="${CXXFLAGS}" \
+     -DLLVM_OPTIMIZED_TABLEGEN=ON
+    ninja -j${JOBS}
     ninja install
 }
 
