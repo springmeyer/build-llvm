@@ -35,10 +35,14 @@ function build() {
      -DCLANG_DEFAULT_CXX_STDLIB=libc++ \
      -DC_INCLUDE_DIRS=:/usr/include:/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1/ \
      -DDEFAULT_SYSROOT=/ \
+     -DCMAKE_BUILD_TYPE=Release \
+     -DLLVM_ENABLE_ASSERTIONS=Off \
      -DCLANG_VENDOR=mapbox/springmeyer \
      -DCLANG_REPOSITORY_STRING=https://github.com/springmeyer/build-llvm \
      -DCLANG_APPEND_VC_REV=$(git -C ../llvm/tools/clang/ rev-list --max-count=1 HEAD) \
-     -DCLANG_VENDOR_UTI=org.mapbox.clang
+     -DCLANG_VENDOR_UTI=org.mapbox.clang \
+     -DCMAKE_EXE_LINKER_FLAGS="${LDFLAGS}" \
+     -DCMAKE_CXX_FLAGS_RELEASE="${CXXFLAGS}"
     ninja -j${JOBS} -l 2
     ninja install
 }
@@ -79,8 +83,10 @@ function main() {
     which cmake || abort 'please install cmake'
     which ninja || abort 'please install ninja'
     # designed to limit the need for extra deps to build lldb
+    export CXXFLAGS="-O3 -flto"
+    export LDFLAGS="-flto"
     if [[ ${ENABLE_LLDB} == true ]]; then
-        export CXXFLAGS="-DLLDB_DISABLE_PYTHON -DLLDB_DISABLE_CURSES -DLLDB_DISABLE_LIBEDIT -DLLVM_ENABLE_TERMINFO=0"
+        export CXXFLAGS="-DLLDB_DISABLE_PYTHON -DLLDB_DISABLE_CURSES -DLLDB_DISABLE_LIBEDIT -DLLVM_ENABLE_TERMINFO=0 ${CXXFLAGS}"
     fi
     if [[ ! -d llvm ]]; then
         setup
