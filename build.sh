@@ -82,9 +82,14 @@ function main() {
     which git || abort 'please install git'
     which cmake || abort 'please install cmake'
     which ninja || abort 'please install ninja'
+    if [[ $(uname -s) == 'Darwin' ]]; then
+        export CXXFLAGS="-O3 -flto"
+        export LDFLAGS="-flto"
+    else
+        export CXXFLAGS="-O3"
+        export LDFLAGS=""
+    fi
     # designed to limit the need for extra deps to build lldb
-    export CXXFLAGS="-O3 -flto"
-    export LDFLAGS="-flto"
     if [[ ${ENABLE_LLDB} == true ]]; then
         export CXXFLAGS="-DLLDB_DISABLE_PYTHON -DLLDB_DISABLE_CURSES -DLLDB_DISABLE_LIBEDIT -DLLVM_ENABLE_TERMINFO=0 ${CXXFLAGS}"
     fi
