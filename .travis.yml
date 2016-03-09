@@ -38,6 +38,11 @@ install:
  - ~/.mason/mason install cmake 3.2.2
  - ~/.mason/mason link cmake 3.2.2
  - export PATH=$(pwd)/mason_packages/.link/bin:${PATH}
+ - git clone --depth=1 git://github.com/martine/ninja.git;
+ - cd ninja;
+ - export PATH=$(pwd):${PATH};
+ - ./configure.py --bootstrap;
+ - cd ../;
  - if [[ $(uname -s) == 'Linux' ]]; then
      echo '#!/bin/bash' > ./cxx_compiler;
      echo 'ccache clang++-3.6 -Qunused-arguments "$@"' >> ./cxx_compiler;
@@ -46,13 +51,6 @@ install:
      echo 'ccache clang-3.6 -Qunused-arguments "$@"' >> ./c_compiler;
      chmod +x ./c_compiler;
      export CC="$(pwd)/c_compiler";
-     git clone --depth=1 git://github.com/martine/ninja.git;
-     cd ninja;
-     export PATH=$(pwd):${PATH};
-     ./configure.py --bootstrap;
-     cd ../;
-   else
-     brew install ninja;
    fi
  - ./build.sh # setup
 
