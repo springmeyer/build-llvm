@@ -43,7 +43,8 @@ function build() {
      -DCLANG_VENDOR_UTI=org.mapbox.clang \
      -DCMAKE_EXE_LINKER_FLAGS="${LDFLAGS}" \
      -DCMAKE_CXX_FLAGS_RELEASE="${CXXFLAGS}" \
-     -DLLVM_OPTIMIZED_TABLEGEN=ON
+     -DLLVM_OPTIMIZED_TABLEGEN=ON \
+     -DCMAKE_JOB_POOL_LINK=1
     ninja -j${JOBS}
     ninja install
 }
