@@ -44,7 +44,9 @@ function build() {
      -DCMAKE_EXE_LINKER_FLAGS="${LDFLAGS}" \
      -DCMAKE_CXX_FLAGS_RELEASE="${CXXFLAGS}" \
      -DLLVM_OPTIMIZED_TABLEGEN=ON \
-     -DCMAKE_JOB_POOL_LINK=1
+     -DCMAKE_JOB_POOL_LINK=link_pool
+    echo 'pool link_pool' >> rules.ninja
+    echo '  depth = 1' >> rules.ninja
     ninja -j${JOBS}
     ninja install
 }
