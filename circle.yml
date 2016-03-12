@@ -1,0 +1,36 @@
+machine:
+  xcode:
+    version: 7.2
+  environment:
+    XCODE_SCHEME: "no"
+    XCODE_WORKSPACE: "no"
+    JOBS: 8
+  pre:
+    - echo "here"
+  post:
+    - echo "there"
+
+dependencies:
+  cache_directories:
+    - "${HOME}/.ccache"
+    - "./llvm"
+
+test:
+  override:
+    - git clone --depth=1 https://github.com/mapbox/mason.git ~/.mason
+    - ~/.mason/mason install cmake 3.2.2
+    - ~/.mason/mason link cmake 3.2.2
+    - export PATH=$(pwd)/mason_packages/.link/bin:${PATH}
+    - git clone --depth=1 git://github.com/martine/ninja.git;
+    - cd ninja;
+    - export PATH=$(pwd):${PATH};
+    - ./configure.py --bootstrap;
+    - cd ../;
+    - echo '#!/bin/bash' > ./cxx_compiler;
+    - echo 'ccache clang++ -Qunused-arguments "$@"' >> ./cxx_compiler;
+    - chmod +x ./cxx_compiler;
+    - export CXX="$(pwd)/cxx_compiler";
+    - echo 'ccache clang -Qunused-arguments "$@"' >> ./c_compiler;
+    - chmod +x ./c_compiler;
+    - export CC="$(pwd)/c_compiler";
+    - ./build.sh
