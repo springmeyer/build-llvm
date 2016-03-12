@@ -23,6 +23,9 @@ function setup_mason() {
 setup_mason
 mason install cmake 3.2.2
 mason link cmake 3.2.2
+mason install ccache 3.2.4
+mason link ccache 3.2.4
+
 if [[ ! -d ninja ]]; then
     git clone --depth=1 git://github.com/martine/ninja.git
     (cd ninja && ./configure.py --bootstrap)
