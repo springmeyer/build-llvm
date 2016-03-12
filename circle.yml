@@ -5,6 +5,7 @@ machine:
     XCODE_SCHEME: "no"
     XCODE_WORKSPACE: "no"
     JOBS: 8
+    PATH: $(pwd)/mason_packages/.link/bin:$(pwd)/ninja:${PATH}
   pre:
     - echo "here"
   post:
@@ -20,15 +21,11 @@ test:
     - git clone --depth=1 https://github.com/mapbox/mason.git ~/.mason
     - ~/.mason/mason install cmake 3.2.2
     - ~/.mason/mason link cmake 3.2.2
-    - export PATH=$(pwd)/mason_packages/.link/bin:${PATH}
-    - export PATH=$(pwd)/ninja:${PATH}
     - git clone --depth=1 git://github.com/martine/ninja.git
     - (cd ninja && ./configure.py --bootstrap)
     - echo '#!/bin/bash' > ./cxx_compiler
     - echo 'ccache clang++ -Qunused-arguments "$@"' >> ./cxx_compiler
     - chmod +x ./cxx_compiler
-    - export CXX="$(pwd)/cxx_compiler"
     - echo 'ccache clang -Qunused-arguments "$@"' >> ./c_compiler
     - chmod +x ./c_compiler
-    - export CC="$(pwd)/c_compiler"
-    - ./build.sh
+    - CXX="$(pwd)/cxx_compiler" CC="$(pwd)/c_compiler" ./build.sh
