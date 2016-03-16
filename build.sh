@@ -43,10 +43,7 @@ function build() {
      -DCLANG_VENDOR_UTI=org.mapbox.clang \
      -DCMAKE_EXE_LINKER_FLAGS="${LDFLAGS}" \
      -DCMAKE_CXX_FLAGS_RELEASE="${CXXFLAGS}" \
-     -DLLVM_OPTIMIZED_TABLEGEN=ON \
-     -DCMAKE_JOB_POOL_LINK=link_pool
-    echo 'pool link_pool' >> rules.ninja
-    echo '  depth = 1' >> rules.ninja
+     -DLLVM_OPTIMIZED_TABLEGEN=ON
     ninja -j${JOBS}
     ninja install
 }
@@ -86,13 +83,8 @@ function main() {
     which git || abort 'please install git'
     which cmake || abort 'please install cmake'
     which ninja || abort 'please install ninja'
-    if [[ $(uname -s) == 'Darwin' ]]; then
-        export CXXFLAGS="-O3 -flto"
-        export LDFLAGS="-flto"
-    else
-        export CXXFLAGS="-O3"
-        export LDFLAGS=""
-    fi
+    export CXXFLAGS="-O3"
+    export LDFLAGS=""
     # designed to limit the need for extra deps to build lldb
     if [[ ${ENABLE_LLDB} == true ]]; then
         export CXXFLAGS="-DLLDB_DISABLE_PYTHON -DLLDB_DISABLE_CURSES -DLLDB_DISABLE_LIBEDIT -DLLVM_ENABLE_TERMINFO=0 ${CXXFLAGS}"
