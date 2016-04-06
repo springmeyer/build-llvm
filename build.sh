@@ -46,6 +46,8 @@ function build() {
      -DLLVM_OPTIMIZED_TABLEGEN=ON
     ninja -j${JOBS}
     ninja install
+    # manual install of tools that don't get installed right
+    cp build/Release/bin/include-what-you-use ${PREFIX}/bin
 }
 
 function setup() {
