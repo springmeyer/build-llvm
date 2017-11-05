@@ -1,3 +1,12 @@
+DEPRECATED. This code has now been ported to https://github.com/mapbox/mason. To build or install llvm via mason:
+
+ - download mason
+ - run: `mason install llvm 6.0.0`
+ 
+More details at https://github.com/mapbox/mason/blob/master/scripts/llvm/base/README.md
+
+--------
+
 Track and build llvm master and friends
 
 [![Build Status](https://travis-ci.org/springmeyer/build-llvm.svg)](https://travis-ci.org/springmeyer/build-llvm)
